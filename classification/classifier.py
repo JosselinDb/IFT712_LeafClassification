@@ -5,6 +5,7 @@ from abc import ABCMeta, abstractmethod
 from sklearn.base import ClassifierMixin
 
 import numpy as np
+import inspect
 
 
 class Classifier(metaclass=ABCMeta):
@@ -34,7 +35,9 @@ class Classifier(metaclass=ABCMeta):
         score(X, y): float
             compute the performance of our model on a set
     """
-    def __init__(self, method: ClassifierMixin, method_kwargs: dict[str, Any]=dict()) -> None:
+    def __init__(self, name, method: ClassifierMixin, method_kwargs: dict[str, Any]=dict()) -> None:
+        self.name = name
+
         self.method = method
         self.hyperparameters = method_kwargs
         
@@ -67,9 +70,10 @@ class Classifier(metaclass=ABCMeta):
 
     def score(self, X, y) -> float:
         """
+        FIXME see sklearn.model_selection.cross_val_score
         Compute the performance of our model on a set
 
-        Arguments
+        Argument
             X: pd.DataFrame
                 data to test into our model
             y: pd.DataFrame
@@ -77,3 +81,26 @@ class Classifier(metaclass=ABCMeta):
         """
         return self.model.score(X, y)
         # return accuracy_score(y, self.predict(X))
+
+    
+    def __str__(self) -> str:
+        s = f"# {self.name}\n"
+
+        method_args = inspect.signature(self.method.__init__)
+        custom_parameters = {}
+        default_parameters = {}
+        for param in method_args.parameters.values():
+            if param.name == "self":
+                continue
+            if param.name in self.hyperparameters:
+                custom_parameters[param.name] = self.hyperparameters[param.name]
+            else:
+                default_parameters[param.name] = param.default
+
+        for name, value in custom_parameters.items():
+            s += f"  *{name}: {value}\n"
+        
+        for name, value in default_parameters.items():
+            s += f"  {name}: {value}\n"
+
+        return s

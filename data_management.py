@@ -60,6 +60,7 @@ class DataManager:
 
     def make_validation_set(self, valid_prop: float = 0.125) -> None:
         """
+        # FIXME using  sklearn.model_selection.train_test_split
         Split our training data into a training set and a validation set
 
         Parameters
