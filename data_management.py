@@ -1,5 +1,7 @@
+from typing import Generator
 import pandas as pd
 import numpy as np
+from sklearn.model_selection import KFold
 
 
 class DataManager:
@@ -32,17 +34,16 @@ class DataManager:
         self.train_data = train_data.drop(columns=["id"])
         self.test_data = test_data.drop(columns=["id"])
 
-    def make_validation_set(self, valid_prop : float) -> tuple[pd.DataFrame, pd.DataFrame]:
+    def make_validation_set(self, valid_prop: float = 0.125) -> tuple[pd.DataFrame, pd.DataFrame]:
         """
         Split our train data into a train set and a validation set
 
         Parameters
-            valid_prop (float between 0 and 1)
+            valid_prop (between 0 and 1)
                 Proportion of rows in the validation set
 
-
-        Returns (pd.DataFrame, pd.DataFrame)
-            The train set and the validation set newly generated
+        Returns
+            The training set and the validation set from our training set
         """
         nb_data = len(self.train_data)
         nb_valid = int(nb_data * valid_prop)
@@ -55,3 +56,19 @@ class DataManager:
             self.train_data.loc[train_idxs],
             self.train_data.loc[valid_idxs]
         )
+
+    def make_kfolds(self, k: int) -> Generator[tuple[np.ndarray, np.ndarray], None, None]:
+        """
+        Split our train data into a train set and a validation set
+
+        Parameters
+            k (> 0)
+                Number of folds
+
+        Returns
+            A generator containing the K-folds from our training set
+            Yields (train_idxs, test_idxs)
+        """
+        kf = KFold(n_splits=k)
+        return kf.split(self.train_data)
+        
