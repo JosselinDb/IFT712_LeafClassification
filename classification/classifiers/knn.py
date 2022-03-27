@@ -1,6 +1,6 @@
-import numpy as np
 from classification.classifier import Classifier
 from sklearn.neighbors import KNeighborsClassifier
+
 
 class KNN(Classifier):
     """
@@ -9,10 +9,11 @@ class KNN(Classifier):
     Parameters
         k: int > 0
             number of neighbors to consider
-        **kwargs:
+        **hyperparameters:
             keyword arguments for the sklearn classifier
+            see: https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html
     """
-    def __init__(self, k: int=10, **kwargs) -> None:
-        kwargs['n_neighbors'] = k
+    def __init__(self, k: int=5, **hyperparameters) -> None:
+        hyperparameters['n_neighbors'] = k
 
-        super().__init__(KNeighborsClassifier, [], kwargs)
+        super().__init__("K-Nearest-Neighbors", KNeighborsClassifier, hyperparameters)
