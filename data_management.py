@@ -67,8 +67,9 @@ class DataManager:
 
         Returns
             A generator containing the K-folds from our training set
-            Yields (train_idxs, test_idxs)
+        Yields
+            train_idxs, test_idxs: (np.ndarray, np.ndarray)
+            the indexes for the training set and the testing set for each iteration
         """
         kf = KFold(n_splits=k)
         return kf.split(self.train_data)
-        
