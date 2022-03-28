@@ -25,7 +25,10 @@ class HyperParameter:
         list_values: np.ndarray
             list of all the values taken by the hyperparameter we want to try
     """
-    def __init__(self, name: str, *, list_values: List[Any]=None, bounds: tuple[float, float]=None, step: float=None) -> None:
+    def __init__(
+        self, name: str, *,
+        list_values: List[Any]=None, bounds: tuple[float, float]=None, step: float=None
+    ) -> None:
         self.name = name
         if list_values is not None:
             self.list_values = np.array(list_values)

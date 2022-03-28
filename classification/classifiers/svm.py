@@ -1,6 +1,6 @@
-from classification.classifier import Classifier
-
 from sklearn.svm import SVC
+
+from classification.classifier import Classifier
 
 
 class SVM(Classifier):

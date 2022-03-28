@@ -1,18 +1,18 @@
-from typing import List, Any
-from abc import ABCMeta, abstractmethod
+from typing import Any
+from abc import ABCMeta
 
-# from sklearn.metrics import accuracy_score
+from numpy import ndarray
+from pandas import DataFrame
 from sklearn.base import ClassifierMixin
-from sklearn.model_selection import GridSearchCV, HalvingGridSearchCV
+from sklearn.model_selection import GridSearchCV
 
-import numpy as np
-from classification.classifier_hyperparameters import ClassifierHyperParameters
+from classification.hyperparameters.classifier_hyperparameters import ClassifierHyperParameters
 
 
 class Classifier(metaclass=ABCMeta):
-    """ TODO à compléter
+    """
     Abstract class
-    Represent a classifier with sklearn
+    Able to perform a classification with sklearn
 
     Parameters
         name: str
@@ -40,7 +40,6 @@ class Classifier(metaclass=ABCMeta):
         best_params: dict
             keyworks arguments of the method after a hp search
 
-
     Methods
         train(x_train, y_train):
             train our model according to our method on the set in arguments
@@ -48,24 +47,27 @@ class Classifier(metaclass=ABCMeta):
             compute the predictions f our model on new data
         score(X, y): float
             compute the performance of our model on a set
+        hyperparameter_search(x_valid, y_valid, verbose): float
+            perform a research on hyperparameters
     """
     def __init__(
-        self, name,
-        method: ClassifierMixin, params: dict[str, Any]=dict(),
+        self, name: str,
+        method: ClassifierMixin,
+        params: dict[str, Any]=None,
         hyperparameters: ClassifierHyperParameters=None
     ) -> None:
         self.name = name
 
         self.method = method
-        self.params = params
+        self.params = {} if params is None else params
 
         self.hyperparameters = hyperparameters
-        
+
         self.model = None
         self.best_model = None
         self.best_params = None
 
-    def train(self, x_train, y_train) -> None:
+    def train(self, x_train: DataFrame, y_train: DataFrame) -> None:
         """
         Train our model according to our method on the set in arguments.
 
@@ -80,39 +82,55 @@ class Classifier(metaclass=ABCMeta):
 
         self.model = model
 
-    def predict(self, X) -> np.ndarray:
+    def predict(self, X: DataFrame) -> ndarray:
         """
         Compute the predictions f our model on new data
 
         Arguments
             X: pd.DataFrame
                 data to predict their targets
+
+        Returns: np.ndarray
+            the predictions of the model for the entry X
         """
         return self.model.predict(X)
 
-    def score(self, X, y) -> float:
+    def score(self, X: DataFrame, y: DataFrame) -> float:
         """
-        FIXME see sklearn.model_selection.cross_val_score or sklearn.metrics.accuracy_score
         Compute the performance of our model on a set
 
-        Argument
+        Arguments
             X: pd.DataFrame
                 data to test into our model
             y: pd.DataFrame
                 true targets of the data X
+
+        Returns: float
+            The score of the model on the data (X, y)
         """
         return self.model.score(X, y)
-        # return accuracy_score(y, self.predict(X))
 
-    def hyperparameter_search(self, *, verbose=0) -> float:
+    def hyperparameter_search(self, x_valid: DataFrame, y_valid: DataFrame, *, verbose: bool=0) -> float:
         """
-        TODO à compléter
+        Perform a research on the hyperparameters
+
+        Arguments
+            x_valid: pd.DataFrame
+                data where to perform the search
+            y_valid: pd.DataFrame
+                target of the data where to perform the search
+            verbose: bool
+                print information during the search
+
+        Returns
+            The score of the model after the search
         """
         search = GridSearchCV(
             self.model,
-            self.hyperparameters.grid(),
+            self.hyperparameters.grid,
             verbose=verbose
         )
+        search.fit(x_valid, y_valid)
 
         best_model = search.best_estimator_
         best_score = search.best_score_
@@ -123,6 +141,9 @@ class Classifier(metaclass=ABCMeta):
         return best_score
 
     def __str__(self) -> str:
+        """
+        The name of the method and the value of the parameters
+        """
         s = f"### {self.name}\n"
 
         for arg, value in self.model.get_params().items():

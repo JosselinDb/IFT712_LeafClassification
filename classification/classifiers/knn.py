@@ -1,5 +1,6 @@
-from classification.classifier import Classifier
 from sklearn.neighbors import KNeighborsClassifier
+
+from classification.classifier import Classifier
 
 
 class KNN(Classifier):

@@ -1,4 +1,5 @@
 from sklearn.ensemble import RandomForestClassifier
+
 from classification.classifier import Classifier
 
 
