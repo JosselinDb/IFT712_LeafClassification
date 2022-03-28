@@ -19,18 +19,27 @@ class Classifier(metaclass=ABCMeta):
             name of the method
         method: ClassifierMixin
             sklearn class of our classifier
-        method_kwargs: dict
+        params: dict
             keyword arguments of method
+        hyperparameters: ClassifierHyperParameters
+            all the hyperparameters we want for our hyperparameter search
 
     Attributes
         name: str
             name of the method
         method: ClassifierMixin
             sklearn class of our classifier
+        params: dict
+            default keyword arguments of method
         hyperparameters: dict
             keyword hyperparameters of our classifier
         model: ClassifierMixin
             fitted instance of our method
+        best_model: ClassifierMixin
+            fitted instance of the method after a hp search
+        best_params: dict
+            keyworks arguments of the method after a hp search
+
 
     Methods
         train(x_train, y_train):
@@ -42,17 +51,19 @@ class Classifier(metaclass=ABCMeta):
     """
     def __init__(
         self, name,
-        method: ClassifierMixin, method_kwargs: dict[str, Any]=dict(),
+        method: ClassifierMixin, params: dict[str, Any]=dict(),
         hyperparameters: ClassifierHyperParameters=None
     ) -> None:
         self.name = name
 
         self.method = method
-        self.method_kwargs = method_kwargs
+        self.params = params
 
         self.hyperparameters = hyperparameters
         
         self.model = None
+        self.best_model = None
+        self.best_params = None
 
     def train(self, x_train, y_train) -> None:
         """
@@ -64,7 +75,7 @@ class Classifier(metaclass=ABCMeta):
             y_train: pd.DataFrame
                 targets of the training set
         """
-        model = self.method(**self.method_kwargs)
+        model = self.method(**self.params)
         model.fit(x_train, y_train)
 
         self.model = model
@@ -81,7 +92,7 @@ class Classifier(metaclass=ABCMeta):
 
     def score(self, X, y) -> float:
         """
-        FIXME see sklearn.model_selection.cross_val_score or accuracy_score
+        FIXME see sklearn.model_selection.cross_val_score or sklearn.metrics.accuracy_score
         Compute the performance of our model on a set
 
         Argument
@@ -93,25 +104,30 @@ class Classifier(metaclass=ABCMeta):
         return self.model.score(X, y)
         # return accuracy_score(y, self.predict(X))
 
-    def hyperparameter_search(self) -> None:
+    def hyperparameter_search(self, *, verbose=0) -> float:
         """
         TODO à compléter
         """
         search = GridSearchCV(
             self.model,
-            self.hyperparameters.grid()
+            self.hyperparameters.grid(),
+            verbose=verbose
         )
 
-    @abstractmethod
-    def show_parameters(self):
-        raise NotImplementedError
-    
+        best_model = search.best_estimator_
+        best_score = search.best_score_
+
+        self.best_model = best_model
+        self.best_params = search.best_params_
+
+        return best_score
+
     def __str__(self) -> str:
         s = f"### {self.name}\n"
 
         for arg, value in self.model.get_params().items():
             s += " "
-            if arg in self.method_kwargs:
+            if arg in self.params:
                 s += "*"
             s += f"{arg}: {value}\n"
 
