@@ -3,9 +3,10 @@ from abc import ABCMeta, abstractmethod
 
 # from sklearn.metrics import accuracy_score
 from sklearn.base import ClassifierMixin
+from sklearn.model_selection import GridSearchCV, HalvingGridSearchCV
 
 import numpy as np
-import inspect
+from classification.classifier_hyperparameters import ClassifierHyperParameters
 
 
 class Classifier(metaclass=ABCMeta):
@@ -14,12 +15,16 @@ class Classifier(metaclass=ABCMeta):
     Represent a classifier with sklearn
 
     Parameters
+        name: str
+            name of the method
         method: ClassifierMixin
             sklearn class of our classifier
         method_kwargs: dict
             keyword arguments of method
 
     Attributes
+        name: str
+            name of the method
         method: ClassifierMixin
             sklearn class of our classifier
         hyperparameters: dict
@@ -35,11 +40,17 @@ class Classifier(metaclass=ABCMeta):
         score(X, y): float
             compute the performance of our model on a set
     """
-    def __init__(self, name, method: ClassifierMixin, method_kwargs: dict[str, Any]=dict()) -> None:
+    def __init__(
+        self, name,
+        method: ClassifierMixin, method_kwargs: dict[str, Any]=dict(),
+        hyperparameters: ClassifierHyperParameters=None
+    ) -> None:
         self.name = name
 
         self.method = method
-        self.hyperparameters = method_kwargs
+        self.method_kwargs = method_kwargs
+
+        self.hyperparameters = hyperparameters
         
         self.model = None
 
@@ -53,7 +64,7 @@ class Classifier(metaclass=ABCMeta):
             y_train: pd.DataFrame
                 targets of the training set
         """
-        model = self.method(**self.hyperparameters)
+        model = self.method(**self.method_kwargs)
         model.fit(x_train, y_train)
 
         self.model = model
@@ -70,7 +81,7 @@ class Classifier(metaclass=ABCMeta):
 
     def score(self, X, y) -> float:
         """
-        FIXME see sklearn.model_selection.cross_val_score
+        FIXME see sklearn.model_selection.cross_val_score or accuracy_score
         Compute the performance of our model on a set
 
         Argument
@@ -82,25 +93,26 @@ class Classifier(metaclass=ABCMeta):
         return self.model.score(X, y)
         # return accuracy_score(y, self.predict(X))
 
+    def hyperparameter_search(self) -> None:
+        """
+        TODO à compléter
+        """
+        search = GridSearchCV(
+            self.model,
+            self.hyperparameters.grid()
+        )
+
+    @abstractmethod
+    def show_parameters(self):
+        raise NotImplementedError
     
     def __str__(self) -> str:
-        s = f"# {self.name}\n"
+        s = f"### {self.name}\n"
 
-        method_args = inspect.signature(self.method.__init__)
-        custom_parameters = {}
-        default_parameters = {}
-        for param in method_args.parameters.values():
-            if param.name == "self":
-                continue
-            if param.name in self.hyperparameters:
-                custom_parameters[param.name] = self.hyperparameters[param.name]
-            else:
-                default_parameters[param.name] = param.default
-
-        for name, value in custom_parameters.items():
-            s += f"  *{name}: {value}\n"
-        
-        for name, value in default_parameters.items():
-            s += f"  {name}: {value}\n"
+        for arg, value in self.model.get_params().items():
+            s += " "
+            if arg in self.method_kwargs:
+                s += "*"
+            s += f"{arg}: {value}\n"
 
         return s
