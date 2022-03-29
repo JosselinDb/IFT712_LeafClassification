@@ -1,7 +1,7 @@
 from typing import Any
 from abc import ABCMeta
 
-from numpy import ndarray
+from numpy import ndarray, prod
 from pandas import DataFrame
 from sklearn.base import ClassifierMixin
 from sklearn.model_selection import GridSearchCV
@@ -82,7 +82,7 @@ class Classifier(metaclass=ABCMeta):
 
         self.model = model
 
-    def predict(self, X: DataFrame) -> ndarray:
+    def predict(self, X: DataFrame, *, best=False) -> ndarray:
         """
         Compute the predictions f our model on new data
 
@@ -93,9 +93,9 @@ class Classifier(metaclass=ABCMeta):
         Returns: np.ndarray
             the predictions of the model for the entry X
         """
-        return self.model.predict(X)
+        return self.model.predict(X) if best else self.model.predict(X)
 
-    def score(self, X: DataFrame, y: DataFrame) -> float:
+    def score(self, X: DataFrame, y: DataFrame, *, best=False) -> float:
         """
         Compute the performance of our model on a set
 
@@ -108,9 +108,9 @@ class Classifier(metaclass=ABCMeta):
         Returns: float
             The score of the model on the data (X, y)
         """
-        return self.model.score(X, y)
+        return self.best_model.score(X, y) if best else self.model.score(X, y)
 
-    def hyperparameter_search(self, x_valid: DataFrame, y_valid: DataFrame, *, verbose: bool=0) -> float:
+    def hyperparameter_search(self, X: DataFrame, y: DataFrame, *, verbose: bool=0) -> float:
         """
         Perform a research on the hyperparameters
 
@@ -125,18 +125,25 @@ class Classifier(metaclass=ABCMeta):
         Returns
             The score of the model after the search
         """
+        if verbose:
+            nb_tests = prod([
+                len(value)
+                for value in self.hyperparameters.grid.values()
+            ])
+            print(f"Researching the best hyperparameters over {nb_tests} combinations.")
+
         search = GridSearchCV(
             self.model,
             self.hyperparameters.grid,
             verbose=verbose
         )
-        search.fit(x_valid, y_valid)
+        search.fit(X, y)
 
         best_model = search.best_estimator_
         best_score = search.best_score_
 
         self.best_model = best_model
-        self.best_parameters = search.best_parameters_
+        self.best_parameters = search.best_params_
 
         return best_score
 
@@ -146,10 +153,11 @@ class Classifier(metaclass=ABCMeta):
         """
         s = f"### {self.name}\n"
 
-        for arg, value in self.model.get_parameters().items():
-            s += " "
-            if arg in self.parameters:
-                s += "*"
-            s += f"{arg}: {value}\n"
+        if self.model is not None:
+            for arg, value in self.model.get_params().items():
+                s += " "
+                if arg in self.parameters:
+                    s += "*"
+                s += f"{arg}: {value}\n"
 
         return s

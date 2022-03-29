@@ -73,7 +73,4 @@ class DataManager:
         if self.x_valid is not None:
             self.init_sets()
 
-        self.x_train, self.x_valid = train_test_split(self.x_train, valid_prop)
-
-        self.y_valid = self.y_train.iloc[self.x_valid.index]
-        self.y_train = self.y_train.iloc[self.x_train.index]
+        self.x_train, self.x_valid, self.y_train, self.y_valid = train_test_split(self.x_train, self.y_train, test_size=valid_prop)
