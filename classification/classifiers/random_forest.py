@@ -11,6 +11,12 @@ class RandomForest(Classifier):
         **hyperparameters:
             keyword arguments for the sklearn classifier
             see: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+
+    Attributes
+        see `Classifier`
+
+    Methods
+        see `Classifier`
     """
 
     def __init__(self, **hyperparameters) -> None:

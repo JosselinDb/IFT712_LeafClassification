@@ -13,6 +13,12 @@ class KNN(Classifier):
         **hyperparameters:
             keyword arguments for the sklearn classifier
             see: https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html
+    
+    Attributes
+        see `Classifier`
+
+    Methods
+        see `Classifier`
     """
     def __init__(self, k: int=5, **hyperparameters) -> None:
         hyperparameters['n_neighbors'] = k
