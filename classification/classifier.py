@@ -19,7 +19,7 @@ class Classifier(metaclass=ABCMeta):
             name of the method
         method: ClassifierMixin
             sklearn class of our classifier
-        params: dict
+        parameters: dict
             keyword arguments of method
         hyperparameters: ClassifierHyperParameters
             all the hyperparameters we want for our hyperparameter search
@@ -29,15 +29,15 @@ class Classifier(metaclass=ABCMeta):
             name of the method
         method: ClassifierMixin
             sklearn class of our classifier
-        params: dict
+        parameters: dict
             default keyword arguments of method
-        hyperparameters: dict
+        hyperparameters: ClassifierHyperParameters
             keyword hyperparameters of our classifier
         model: ClassifierMixin
             fitted instance of our method
         best_model: ClassifierMixin
             fitted instance of the method after a hp search
-        best_params: dict
+        best_parameters: dict
             keyworks arguments of the method after a hp search
 
     Methods
@@ -53,19 +53,19 @@ class Classifier(metaclass=ABCMeta):
     def __init__(
         self, name: str,
         method: ClassifierMixin,
-        params: dict[str, Any]=None,
+        parameters: dict[str, Any]=None,
         hyperparameters: ClassifierHyperParameters=None
     ) -> None:
         self.name = name
 
         self.method = method
-        self.params = {} if params is None else params
+        self.parameters = {} if parameters is None else parameters
 
         self.hyperparameters = hyperparameters
 
         self.model = None
         self.best_model = None
-        self.best_params = None
+        self.best_parameters = None
 
     def train(self, x_train: DataFrame, y_train: DataFrame) -> None:
         """
@@ -77,7 +77,7 @@ class Classifier(metaclass=ABCMeta):
             y_train: pd.DataFrame
                 targets of the training set
         """
-        model = self.method(**self.params)
+        model = self.method(**self.parameters)
         model.fit(x_train, y_train)
 
         self.model = model
@@ -136,7 +136,7 @@ class Classifier(metaclass=ABCMeta):
         best_score = search.best_score_
 
         self.best_model = best_model
-        self.best_params = search.best_params_
+        self.best_parameters = search.best_parameters_
 
         return best_score
 
@@ -146,9 +146,9 @@ class Classifier(metaclass=ABCMeta):
         """
         s = f"### {self.name}\n"
 
-        for arg, value in self.model.get_params().items():
+        for arg, value in self.model.get_parameters().items():
             s += " "
-            if arg in self.params:
+            if arg in self.parameters:
                 s += "*"
             s += f"{arg}: {value}\n"
 
