@@ -1,4 +1,4 @@
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import GaussianNB as GNB
 
 from classification.classifier import Classifier
 
@@ -19,4 +19,4 @@ class GaussianNB(Classifier):
         see `Classifier`
     """
     def __init__(self, **hyperparameters) -> None:
-        super().__init__("Gaussian Naive Bayes", GaussianNB, hyperparameters)
+        super().__init__("Gaussian Naive Bayes", GNB, hyperparameters)
