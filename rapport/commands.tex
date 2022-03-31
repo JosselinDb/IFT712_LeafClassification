@@ -1,0 +1,48 @@
+%% -------- %%
+%% PACKAGES %%
+%% -------- %%
+
+%% APPARENCE
+\usepackage[T1]{fontenc}  % encodage accents
+\usepackage{fancyhdr}  % style de page
+\usepackage{lastpage}  % référence la dernière page (utile pour la pagination)
+\usepackage{wallpaper}  % fond imagé
+\usepackage{sectsty}    % pour paramétrer les titres
+
+%% MATHS
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{dsfont}
+\usepackage{stmaryrd} %\llbracket
+
+%% FONTS & TEXTS
+\usepackage{fontawesome5}
+\usepackage{lipsum} % La commande \lipsum[x-y] génère un texte type en pseudo-latin
+% \usepackage[utf8]{inputenc}  %  encodage
+\usepackage{textcomp}
+\usepackage{textgreek} %lettres grecques avec \textalpha,...
+
+%% AUTRES
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tabularx}
+
+
+\usepackage[backend=biber,sorting = none]{biblatex}
+
+\usepackage[autostyle = try]{csquotes}
+\MakeOuterQuote{"}
+
+
+%% --------- %%
+%% COMMANDES %%
+%% --------- %%
+
+% LIST OF FIGURES WITHOUT TITLE
+\makeatletter\newcommand{\lofwithouttitle}{\@starttoc{lof}}\makeatother
+
+%% COMMANDES COMMUNES
+\def\sc{\textsc} \def\bf{\textbf} \def\it{\textit} \def\sl{\textsl} \def\tt{\texttt} \def\sf{\textsc}
+\def\up{\textsuperscript} \def\down{\textsubscript}

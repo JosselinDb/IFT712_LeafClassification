@@ -1,0 +1,63 @@
+\subsection{Hyperparamètres conservés}
+
+On présente ici les grilles d'hyperparamètres choisies pour l'analyse, ainsi que les paramètres finaux validés par la recherche.
+
+\subsubsection*{K plus proches voisins}
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|X|X|}
+    \hline
+    \bf{Paramètre} & \bf{Intervalle de valeurs} & \bf{Valeur conservée}\\
+    \hline
+    k & [1, 15] & 1\\\hline
+    Algorithme (et leurs paramètres propres) & \{ Ball Tree (nombre de feuilles : [10, 100]), KDTree, Brute Force \} & Ball Tree (nombre de feuilles : 10)\\\hline
+    Métrique (et leurs paramètres propres) & \{ $\|\cdot\|_1$, $\|\cdot\|_2$ \} & $\|\cdot\|_1$\\\hline
+    Poids & \{ Uniforme, Inverse de la distance \} & Uniforme\\\hline
+\end{tabularx}\\
+
+On peut noter que le k = 1 est très étonnant : il suffit de regarder le voisin dont on est le plus proche pour estimer au mieux sa classe.
+
+\subsubsection*{Perceptron Multi Couches}
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|X|X|}
+    \hline
+    \bf{Paramètre} & \bf{Intervalle de valeurs} & \bf{Valeur conservée}\\
+    \hline
+    Nombre et taille des couches  & 1x100, 1x50, 2x10, 2x25 & 1x50 \\\hline
+    Fonction d'activation & \{ Identité, Logistique, Tanh, ReLU \} & Logistique \\\hline
+    Solveur et leurs paramètres & \{ lbfgs (alpha: [10$^{-6}$, 10$^{-1}$]), sgd (taux d'apprentissage : \{ constant, adaptatif \}, moment : [0, 1]), adam ($\beta$ : [0.5, 1[$^2$) \} & lbfgs (alpha = 10^${-3}$)\\\hline
+\end{tabularx}
+
+\subsubsection*{Forêt d'arbres décisionnels}
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|X|X|}
+    \hline
+    \bf{Paramètre} & \bf{Intervalle de valeurs} & \bf{Valeur conservée}\\
+    \hline
+    Nombre d'arbres  & \{ 10, 50, 100 \} & 100\\\hline
+    Critère de qualité & \{ Impureté de Gini, Entropie\} & Impureté de Gini\\\hline
+\end{tabularx}
+
+\subsubsection*{Machines à vecteur de support}
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|X|X|}
+    \hline
+    \bf{Paramètre} & \bf{Intervalle de valeurs} & \bf{Valeur conservée}\\
+    \hline
+    Noyau (et leurs paramètres)  & \{ Linéaire, Polynomial (degré: [3, 15]), rbf, Sigmoïde \} & rbf \\\hline
+    Terme de pénalisation  & [0.1, 2] & 2\\\hline
+    Forme de la fonction de décision  & \{ one-vs-one, one-vs-rest\} & one-vs-one \\\hline
+\end{tabularx}
+
+\subsubsection*{Processus gaussiens}
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|X|X|}
+    \hline
+    \bf{Paramètre} & \bf{Intervalle de valeurs} & \bf{Valeur conservée}\\
+    \hline
+     Forme de la fonction de décision  & \{ one-vs-one, one-vs-rest\} & one-vs-rest \\\hline
+\end{tabularx}

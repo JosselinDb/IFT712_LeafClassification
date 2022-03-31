@@ -1,0 +1,13 @@
+\subsection{Perceptron Multi-Couches (Multi Layer Perceptron)}
+
+On implémente aussi un réseau neuronal simple, le perceptron multi-couche \href{https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html}{Perceptron Multi-Couche}. Il consiste en plusieurs couches pleinement connectées de perceptrons, permettant de faire des transformations non linéaires de notre espace de points.\\
+
+La méthode dispose de plusieurs hyperparamètres :
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|X|}
+    \hline
+    Nombre et taille des couches  & Nombre de couches cachées et nombre de neurones par couches.\\\hline
+    Fonction d'activation & La fonction d'activation des perceptrons, parmi sigmoïde, tanh et ReLU. \\\hline
+    Solveur et leurs paramètres & Le solveur utilisé pour la rétropropagation, parmi lbfgs, sgd (et son taux d'apprentissage et moment) et adam (et ses taux de décomposition des vecteurs de moments) . \\\hline
+\end{tabularx}

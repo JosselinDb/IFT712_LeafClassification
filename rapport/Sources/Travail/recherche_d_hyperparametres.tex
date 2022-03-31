@@ -1,0 +1,5 @@
+\subsection{Recherche d'hyperparamètres}
+
+Pour chaque modèle, on se doit de faire une recherche d'hyperparamètres. On utilise pour cela une grille d'hyperparamètres (le produit cartésien des valeurs à tester pour chaque hyperparamètre) avec laquelle on va entraîner le modèle pour chacune des combinaisons. On applique une validation croisée basée sur la précision (tout comme la mesure de la performance) pour valider la meilleur combinaison. Tout cela se fait grace à la classe \href{https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html}{GridSearchCV} de \it{sklearn}.\\
+
+Pour former la grille d'hyperparamètres, on choisit à la main les valeurs pour chaque hyperparamètre.

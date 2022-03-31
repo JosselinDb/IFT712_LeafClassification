@@ -1,0 +1,40 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage{lipsum}    % TO REMOVE
+
+
+\input{commands.tex}
+
+\input{setup.tex}
+
+%%%%% DOCUMENT %%%%%
+
+\begin{document}
+
+\begin{titlepage}
+    \maketitle
+    \thispagestyle{empty}
+    \vfill
+\end{titlepage}
+\pagebreak
+
+\CenterWallPaper{1}{Images/charte/charte-graphique-sans-logo-V2.png}
+
+\fancyhead[L]{Table des matières}
+\tableofcontents
+\pagebreak
+
+\input{Sources/Introduction/main}
+
+\input{Sources/Travail/main}
+
+\input{Sources/Modeles/main}
+
+\input{Sources/Resultats/main}
+
+\input{Sources/Conclusion/main}
+
+\pagebreak
+\input{Sources/liste_des_figures}
+
+\end{document}

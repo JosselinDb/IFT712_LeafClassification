@@ -1,0 +1,13 @@
+\subsection{Machine à Vecteur de Support (Vector Support Machine)}
+
+Le prochain classifieur utilise les \href{https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html}{machines à vecteur de support} avec différents noyaux, qui permettent de changer la représentation des points en les plongeant dans un espace dans lequel on espère qu'ils soient linéairement séparables (modulo une marge).\\
+
+Encore une fois, le modèle dispose de différents hyperparamètres :
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|X|}
+    \hline
+    Noyau (et leurs paramètres)  & Fonction de noyau pour la régression, parmi linéaire, polynomial (et son degré), fonction de base radiale et sigmoïde.\\\hline
+    Terme de pénalisation  & Paramètre de la régularisation $\ell_2$ pour nos paramètres.\\\hline
+    Forme de la fonction de décision  & Parmi "one-vs-one" et "one-vs-rest".\\\hline
+\end{tabularx}

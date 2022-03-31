@@ -1,0 +1,62 @@
+%% PAGE FORMAT
+\usepackage[left=2cm,right=2cm,top=4cm,bottom=2.5cm]{geometry}
+\usepackage[french]{babel}
+
+
+%% COULEURS
+
+\usepackage{xcolor}
+\definecolor{vert_}{rgb}{0, 0.53, 0.29}
+\definecolor{gris_}{rgb}{0.14, 0.12, 0.13}
+
+
+%% LIENS
+
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+    colorlinks=true,
+    allcolors=gris_,
+    linktoc=all
+}
+\usepackage{float}
+
+%% FONTS
+
+\usepackage{fontspec}
+\setmainfont{Roboto}
+
+
+%% DOCUMENT INFORMATIONS
+
+\author{
+    \bf{Étudiants}\\Josselin \sc{Dubois} (dubj0701)\\Antoine \sc{Guenard} (guea0702)\\Yann \sc{Jourdin} (jouy0701)\\
+}
+
+\date{
+    14 Avril 2022
+}
+
+
+\title{
+    \vfill
+    IFT712\\
+    Projet de fin de session\\
+    \vspace{2cm}
+    \bf{Classification de feuilles}
+    \vspace{2cm}
+}
+
+
+%% PAGE STYLE
+
+\fancypagestyle{plain}{
+    \fancyhead{}
+    \fancyfoot{}
+    \fancyfoot[R]{\thepage/\pageref{LastPage}}
+    \def\headrulewidth{0.1pt}
+}
+\pagestyle{plain}
+
+\CenterWallPaper{1}{Images/charte/charte-graphique-avec-logo.png}
+
+\allsectionsfont{\color{vert_}\fontspec{Roboto}} %sectsty
