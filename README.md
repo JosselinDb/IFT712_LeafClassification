@@ -7,3 +7,5 @@
 
 Lien du git : https://github.com/JosselinDb/IFT712_LeafClassification
 
+Le notebook de présentation se trouve dans `source/`.
+Le pdf du rapport se trouve dans `rapport/`
